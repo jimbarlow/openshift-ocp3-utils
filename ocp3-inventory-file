@@ -1,0 +1,206 @@
+###########################################################################
+# SunTrust PoC Inventory File
+###########################################################################
+# Create an OSEv3 group that contains the masters, nodes, and etcd groups
+[OSEv3:children]
+masters
+nodes
+etcd
+nfs
+
+# Set variables common for all OSEv3 hosts
+[OSEv3:vars]
+###########################################################################
+### The following are required for versions >= 3.11 redhat_registry_user=redhat_registry_password= 
+###########################################################################
+redhat_registry_user=jbarlowrhn
+redhat_registry_password=
+
+###########################################################################
+# Ansible Vars
+###########################################################################
+timeout=60
+ansible_ssh_user=root
+log_path=/root
+
+###########################################################################
+### OpenShift Basic Vars
+###################################################
+openshift_disable_check=memory_availability,disk_availability
+
+openshift_set_hostname=True
+openshift_clock_enabled=True
+	
+# The following line is necessary if using NFS for the cluster elements
+openshift_enable_unsupported_configurations=True
+openshift_deployment_type=openshift-enterprise
+
+# uncomment out the following if you want to specify a specific version of OpenShift, the default is the "latest"
+# openshift_image_tag=v3.11.146
+# openshift_pkg_version=-3.11.146
+# openshift_release=3.11.146
+
+# Deploy Operator Lifecycle Management Tech Preview
+openshift_enable_olm=true
+openshift_additional_registry_credentials=[{'host':'registry.connect.redhat.com','user':'{{ redhat_registry_user }}','password':'{{ redhat_registry_password }}','test_image':'mongodb/enterprise-operator:0.3.2'}]
+
+# uncomment the following to enable htpasswd authentication; defaults to DenyAllPasswordIdentityProvider
+openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider'}]
+
+openshift_additional_registry_credentials=[{'host':'registry.connect.redhat.com','user':'{{ redhat_registry_user }}','password':'{{ redhat_registry_password }}','test_image':'mongodb/enterprise-operator:0.3.2'}]
+
+###########################################################################
+### OpenShift Cockpit Vars
+###########################################################################
+
+# Enable cockpit
+osm_use_cockpit=true
+osm_cockpit_plugins=['cockpit-kubernetes']
+
+###########################################################################
+### OpenShift Metrics and Logging Vars
+###########################################################################
+
+###########################################################################
+# Prometheus Metrics
+###########################################################################
+
+openshift_cluster_monitoring_operator_install=True
+openshift_cluster_monitoring_operator_node_selector={"node-role.kubernetes.io/infra":"true"}
+
+###########################################################################
+# Cluster metrics
+###########################################################################
+
+openshift_metrics_storage_kind=nfs
+openshift_metrics_storage_access_modes=['ReadWriteOnce']
+openshift_metrics_storage_nfs_directory=/exports
+openshift_metrics_storage_nfs_options='*(rw,root_squash)'
+openshift_metrics_storage_volume_name=metrics
+openshift_metrics_storage_volume_size=10Gi
+openshift_metrics_install_metrics=True
+# openshift_metrics_install_metrics=False
+
+openshift_metrics_heapster_nodeselector={"node-role.kubernetes.io/infra":"true"}
+openshift_metrics_cassandra_pvc_size=10Gi
+openshift_metrics_hawkular_nodeselector={"node-role.kubernetes.io/infra": "true"}
+openshift_metrics_cassandra_nodeselector={"node-role.kubernetes.io/infra": "true"}
+openshift_metrics_heapster_nodeselector={"node-role.kubernetes.io/infra": "true"}
+
+# Store Metrics for 2 days
+openshift_metrics_duration=2
+
+###########################################################################
+# Cluster logging
+###########################################################################
+
+[OSEv3:vars]
+
+openshift_logging_storage_kind=nfs
+openshift_logging_storage_access_modes=['ReadWriteOnce']
+openshift_logging_storage_nfs_directory=/exports
+openshift_logging_storage_nfs_options='*(rw,root_squash)'
+openshift_logging_storage_volume_name=logging
+openshift_logging_storage_volume_size=10Gi
+
+openshift_logging_install_logging=True
+
+openshift_logging_storage_labels={'storage': 'los_sdn_network_plugin_name='redhat/openshift-ovs-networkpolicy'de-role.kubernetes.io/infra": "true"}
+
+###########################################################################
+### OpenShift Router and Registry Vars
+###########################################################################
+
+oreg_url=registry.redhat.io/openshift3/ose-${component}:${version}
+oreg_auth_user="{{ redhat_registry_user }}"
+oreg_auth_password="{{ redhat_registry_password }}"
+
+openshift_hosted_router_replicas=1
+
+# The following commmented out -- will use default self-signed certs for now
+# openshift_hosted_router_certificate={"certfile": "/root/certificates/fullchain.pem", "keyfile": "/root/certifi
+
+###########################################################################
+### Registry
+###########################################################################
+
+openshift_hosted_registry_selector='node-role.kubernetes.io/infra=true'
+openshift_hosted_registry_replicas=1
+
+openshift_hosted_registry_storage_kind=nfs
+openshift_hosted_registry_storage_access_modes=['ReadWriteMany']
+openshift_hosted_registry_storage_nfs_directory=/exports
+openshift_hosted_registry_storage_nfs_options='*(rw,root_squash)'
+openshift_hosted_registry_storage_volume_name=registry
+openshift_hosted_registry_storage_volume_size=40Gi
+
+openshift_hosted_router_selector="node-role.kubernetes.io/infra=true"
+
+###########################################################################
+### OpenShift Service Catalog Vars
+###########################################################################
+
+openshift_enable_service_catalog=true
+
+###########################################################################
+### OpenShift Network Vars
+###########################################################################
+
+osm_cluster_network_cidr=10.1.0.0/16
+openshift_portal_net=172.30.0.0/16
+
+# os_sdn_network_plugin_name='redhat/openshift-ovs-networkpolicy'
+
+###########################################################################
+### OpenShift Master Vars
+###########################################################################
+
+openshift_master_api_port=443
+openshift_master_console_port=443
+
+openshift_master_cluster_method=native
+openshift_master_cluster_hostname=master.ocp3.example.com
+
+# put a nice DNS entry below if possible
+openshift_master_cluster_public_hostname=master.ocp3.jimbarlow.com
+
+# openshift_master_cluster_public_hostname=master.ocp.suntrust.com
+
+#openshift_master_default_subdomain=apps.NC006VTAD19
+openshift_master_default_subdomain=apps.ocp3.example.com
+
+# in dns will need *.apps.ocp.suntrust.com
+
+# openshift_master_default_subdomain=apps.suntrust-f19d.open.redhat.com
+# The lines should be added based on my testing
+#
+openshift_master_overwrite_named_certificates=False
+openshift_logging_es_ops_nodeselector={"node-role.kubernetes.io/infra":"true"}
+openshift_logging_es_nodeselector={"node-role.kubernetes.io/infra":"true"}
+openshift_logging_es_pvc_dynamic=true
+os_firewall_use_firewalld=true
+openshift_metrics_start_cluster=True
+openshift_metrics_cassandra_storage_type=pv
+# For PoC we will use the default self-signed certificates
+# openshift_master_named_certificates=[{"certfile": "/root/certificates/fullchain.pem", "keyfile": "/root/certificates/key.pem", "cafile": "/root/certificates/ca.cer"}]
+
+###########################################################################
+### Nodes Vars
+###########################################################################
+
+# host group for masters
+[masters]
+master.ocp3.example.com
+
+# host group for etcd
+[etcd]
+master.ocp3.example.com
+[nodes]
+master.ocp3.example.com openshift_node_group_name='node-config-master'
+node1.ocp3.example.com openshift_node_group_name='node-config-compute'
+node2.ocp3.example.com openshift_node_group_name='node-config-compute'
+infra.ocp3.example.com openshift_node_group_name='node-config-infra'
+
+# Helper node with NFS
+[nfs]
+helper.ocp3.example.com
