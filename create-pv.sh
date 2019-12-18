@@ -34,7 +34,7 @@ for volume in $(seq 1 $NUM_VOLUMES);  do cat << ENDJASON > /$YAML_FILES_DIR/${vo
     },
     "accessModes": [ "ReadWriteOnce" ],
     "nfs": {
-        "path": "/exports/user-vols/${volsize}-${volume}",
+        "path": "/exports/user-vols/${volsize}${volume}",
         "server": "$NFS_SERVER"
     },
     "persistentVolumeReclaimPolicy": "Recycle"
