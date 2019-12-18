@@ -1,5 +1,5 @@
 ###########################################################################
-# SunTrust PoC Inventory File
+# Jim's PoC Inventory File
 ###########################################################################
 # Create an OSEv3 group that contains the masters, nodes, and etcd groups
 [OSEv3:children]
@@ -13,7 +13,7 @@ nfs
 ###########################################################################
 ### The following are required for versions >= 3.11 redhat_registry_user=redhat_registry_password= 
 ###########################################################################
-redhat_registry_user=jbarlowrhn
+redhat_registry_user=
 redhat_registry_password=
 
 ###########################################################################
@@ -161,19 +161,9 @@ openshift_master_console_port=443
 openshift_master_cluster_method=native
 openshift_master_cluster_hostname=master.ocp3.example.com
 
-# put a nice DNS entry below if possible
 openshift_master_cluster_public_hostname=master.ocp3.jimbarlow.com
-
-# openshift_master_cluster_public_hostname=master.ocp.suntrust.com
-
-#openshift_master_default_subdomain=apps.NC006VTAD19
 openshift_master_default_subdomain=apps.ocp3.example.com
 
-# in dns will need *.apps.ocp.suntrust.com
-
-# openshift_master_default_subdomain=apps.suntrust-f19d.open.redhat.com
-# The lines should be added based on my testing
-#
 openshift_master_overwrite_named_certificates=False
 openshift_logging_es_ops_nodeselector={"node-role.kubernetes.io/infra":"true"}
 openshift_logging_es_nodeselector={"node-role.kubernetes.io/infra":"true"}
@@ -181,6 +171,7 @@ openshift_logging_es_pvc_dynamic=true
 os_firewall_use_firewalld=true
 openshift_metrics_start_cluster=True
 openshift_metrics_cassandra_storage_type=pv
+
 # For PoC we will use the default self-signed certificates
 # openshift_master_named_certificates=[{"certfile": "/root/certificates/fullchain.pem", "keyfile": "/root/certificates/key.pem", "cafile": "/root/certificates/ca.cer"}]
 
