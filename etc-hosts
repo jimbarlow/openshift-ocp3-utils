@@ -1,0 +1,17 @@
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+10.11.95.143 tower.openstack.salab.redhat.com
+192.168.29.21 vhost1.example.com vhost1
+192.168.29.22 vhost2.example.com vhost2
+192.168.29.23 vhost3.example.com vhost3
+192.168.29.25 helper.ocp3.example.com helper
+# 192.168.29.30 apps.ocp3.example.com 
+# 192.168.29.26 master.ocp3.example.com
+# 192.168.29.27 infra.ocp3.example.com
+# 192.168.29.28 node1.ocp3.example.com
+# 192.168.29.29 node2.ocp3.example.com
+192.168.29.30 apps.ocp3.example.com apps
+192.168.29.30 master.ocp3.example.com master master
+192.168.29.31 node1.ocp3.example.com node1 
+192.168.29.32 node2.ocp3.example.com node2 
+192.168.29.33 node3.ocp3.example.com node3 
