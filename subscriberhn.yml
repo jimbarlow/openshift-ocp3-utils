@@ -1,0 +1,19 @@
+---
+- name: subscribe the host to rhn
+  vars:
+    # file: group_vars/creds.yml
+  hosts: all 
+  become: True
+
+  tasks:
+    
+    - set_fact:
+        username: "{{ lookup('env','rhn_user') }}" 
+        password: "{{ lookup('env','rhn_passwd') }}"
+        pool: "{{ lookup('env','pool_id') }}"
+      delegate_to: localhost
+    - redhat_subscription:
+        state: present
+        username: "{{ username }}" 
+        password: "{{ password }}"
+        pool_ids: "{{ pool }}"

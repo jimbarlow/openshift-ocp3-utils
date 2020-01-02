@@ -131,6 +131,10 @@ openshift_cluster_monitoring_operator_alertmanager_storage_class_name='glusterfs
 # Brenden, the following needs "apps." put in front of spltamweb01v.unx
 # openshift_master_default_subdomain=spltamweb01v.unx.incommtech.net
 
+#########################
+## OPenShift Master Vars
+#########################
+
 openshift_master_api_port=443
 openshift_master_console_port=443
 
@@ -182,5 +186,5 @@ node3.ocp3.example.com glusterfs_ip=192.168.29.33 glusterfs_zone=1 glusterfs_dev
 # spltamweb04v.unx.incommtech.net glusterfs_devices='[ "/dev/sdb" ]'
 
 node1.ocp3.example.com glusterfs_ip=192.168.29.31 glusterfs_zone=1 glusterfs_devices='[ "/dev/vdc" ]'
-node2.ocp3.example.com glusterfs_ip=192.168.29.32 glusterfs_zone=1 glusterfs_devices='[ "/dev/vdc" ]'
-node3.ocp3.example.com glusterfs_ip=192.168.29.33 glusterfs_zone=1 glusterfs_devices='[ "/dev/vdc" ]'
+node2.ocp3.example.com glusterfs_ip=192.168.29.32 glusterfs_zone=2 glusterfs_devices='[ "/dev/vdc" ]'
+node3.ocp3.example.com glusterfs_ip=192.168.29.33 glusterfs_zone=3 glusterfs_devices='[ "/dev/vdc" ]'

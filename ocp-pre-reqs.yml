@@ -1,0 +1,126 @@
+---
+- name: get hosts ready for ocp 3.11
+  vars:
+    active_hosts: all
+  remote_user: root
+  become: True
+  hosts: "{{ active_hosts }}"
+  tasks:
+    - name: install the base os utilities needed
+      yum:
+        pkg: "{{ item }}"
+        state: latest
+      with_items:
+        - wget 
+        - git
+        - net-tools
+        - bind-utils
+        - yum-utils
+        - iptables-services
+        - bridge-utils
+        - bash-completion
+        - kexec-tools
+        - sos
+        - psacct
+        - vim
+
+    - name: update all packages 
+      yum:
+        pkg: '*'
+        state: latest
+      ignore_errors: yes
+      retries: 3
+      delay: 5
+      register: result
+      no_log: true
+      until: result.rc == 0
+
+    - name: reboot the node
+      shell: sleep 2 && shutdown -r now "Rebooting from a playbook"
+      async: 1
+      poll: 0
+      become: True
+      ignore_errors: yes
+
+    - name: waiting for a machine to complete reboot
+      become: False
+      delegate_to: localhost  
+      wait_for:
+        host: "{{ inventory_hostname }}"
+        state: started
+        delay: 30
+        timeout: 300
+        port: 22
+        search_regex: OpenSSH
+    
+    - name: install openshift packages
+      yum:
+        pkg: "{{ item }}"
+        state: latest
+      with_items:
+        - openshift-ansible
+        - docker-1.13.1
+      tags: atomic_utils 
+
+    - name: prep docker storage
+      template:
+        src: docker-storage-setup.j2
+        dest: /etc/sysconfig/docker-storage-setup
+      tags: docker_storage     
+
+    - name: docker-storage-setup
+      command: docker-storage-setup
+      tags: docker_storage   
+
+    - name: enable and start docker
+      service:
+        name: docker
+        state: started
+        enabled: True
+      tags: docker_start
+
+    - name: Create a PV, VG, and LV
+      lvg:
+        vg: nfsvg
+        pvs: /dev/sdc
+        state: present
+      when: 'inventory_hostname in groups.masters or inventory_hostname in groups.infras'
+      tags: nfs_setup
+
+    - name: Create a Logical Volume in the vg
+      lvol:
+        vg: nfsvg
+        lv: nfslv
+        size: +100%FREE
+      when: 'inventory_hostname in groups.masters or inventory_hostname in groups.infras'
+      tags: nfs_setup
+
+    - name: Create a fiiesystem on the Logical Volume
+      filesystem:
+        fstype: xfs
+        dev: /dev/mapper/nfsvg-nfslv
+      when: 'inventory_hostname in groups.masters or inventory_hostname in groups.infras'
+      tags: nfs_setup
+ 
+    - name: Create a directory to mount on on the master
+      file:
+        dest: /exports
+        mode: 0777
+        state: directory
+        owner: root        
+      tags: nfs_setup
+
+    - name: Create the mount point in fstab
+      lineinfile:
+        path: /etc/fstab
+        line: /dev/mapper/nfsvg-nfslv  /exports xfs  defaults 0 0
+        insertafter: ^UUID
+      when: 'inventory_hostname in groups.masters or inventory_hostname in groups.infras'
+      tags: nfs_setup
+
+    - name: Mount the filesystem on mountpoint
+      command: mount -a remount
+      when: 'inventory_hostname in groups.masters or inventory_hostname in groups.infras'
+      tags: nfs_setup
+      
+#    - name: prep nfs storage
