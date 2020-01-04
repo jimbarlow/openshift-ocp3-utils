@@ -26,7 +26,7 @@ log_path=/root
 ###########################################################################
 ### OpenShift Basic Vars
 ###################################################
-openshift_disable_check=memory_availability,disk_availability
+openshift_disable_check=memory_availability,disk_availability,package_version,package_availability
 
 openshift_set_hostname=True
 openshift_clock_enabled=True
@@ -36,9 +36,9 @@ openshift_enable_unsupported_configurations=True
 openshift_deployment_type=openshift-enterprise
 
 # uncomment out the following if you want to specify a specific version of OpenShift, the default is the "latest"
-# openshift_image_tag=v3.11.146
-# openshift_pkg_version=-3.11.146
-# openshift_release=3.11.146
+openshift_image_tag=v3.11.146
+openshift_pkg_version=-3.11.146
+openshift_release=3.11.146
 
 # Deploy Operator Lifecycle Management Tech Preview
 openshift_enable_olm=true
@@ -159,10 +159,10 @@ openshift_master_api_port=443
 openshift_master_console_port=443
 
 openshift_master_cluster_method=native
-openshift_master_cluster_hostname=master.ocp3.example.com
+openshift_master_cluster_hostname=master.ocp.example.com
 
-openshift_master_cluster_public_hostname=master.ocp3.jimbarlow.com
-openshift_master_default_subdomain=apps.ocp3.example.com
+openshift_master_cluster_public_hostname=master.ocp.jimbarlow.com
+openshift_master_default_subdomain=apps.ocp.example.com
 
 openshift_master_overwrite_named_certificates=False
 openshift_logging_es_ops_nodeselector={"node-role.kubernetes.io/infra":"true"}
@@ -181,17 +181,17 @@ openshift_metrics_cassandra_storage_type=pv
 
 # host group for masters
 [masters]
-master.ocp3.example.com
+master.ocp.example.com
 
 # host group for etcd
 [etcd]
-master.ocp3.example.com
+master.ocp.example.com
 [nodes]
-master.ocp3.example.com openshift_node_group_name='node-config-master'
-node1.ocp3.example.com openshift_node_group_name='node-config-compute'
-node2.ocp3.example.com openshift_node_group_name='node-config-compute'
-infra.ocp3.example.com openshift_node_group_name='node-config-infra'
+master.ocp.example.com openshift_node_group_name='node-config-master'
+node1.ocp.example.com openshift_node_group_name='node-config-compute'
+node2.ocp.example.com openshift_node_group_name='node-config-compute'
+infra.ocp.example.com openshift_node_group_name='node-config-infra'
 
 # Helper node with NFS
 [nfs]
-helper.ocp3.example.com
+helper2.ocp.example.com

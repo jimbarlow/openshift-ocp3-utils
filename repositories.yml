@@ -1,0 +1,34 @@
+- name: Enable Repositories
+  hosts: all
+  become: True
+  vars:
+    repositories:
+      - rhel-7-server-rpms
+      - rhel-7-server-extras-rpms
+      - rhel-7-server-ansible-2.6-rpms 
+      - rhel-7-server-ose-3.11-rpms
+      - rh-gluster-3-client-for-rhel-7-server-rpms
+
+  tasks:
+    - name: remove current repositories
+      yum_repository:
+        name: "*"
+        state: absent
+
+    - name: remove current repositories
+      shell: subscription-manager repos --disable="*"
+
+    - name: subscribe to the desired repositories
+      shell: subscription-manager repos --enable={{ item }} 
+      with_items: "{{ repositories }}" 
+
+      #     - name: subscribe to epel
+      #       yum_repository:
+      #         name: epel
+      #         description: EPEL YUM repo
+      #         baseurl: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+      #     - name: install pip2
+      #       yum:
+      #         name: python2-pip
+      #         state: present
+

@@ -41,6 +41,7 @@
       poll: 0
       become: True
       ignore_errors: yes
+      tags: reboot
 
     - name: waiting for a machine to complete reboot
       become: False
@@ -52,6 +53,7 @@
         timeout: 300
         port: 22
         search_regex: OpenSSH
+      tags: reboot
     
     - name: install openshift packages
       yum:
@@ -82,9 +84,9 @@
     - name: Create a PV, VG, and LV
       lvg:
         vg: nfsvg
-        pvs: /dev/sdc
+        pvs: /dev/vdc
         state: present
-      when: 'inventory_hostname in groups.masters or inventory_hostname in groups.infras'
+      when: 'inventory_hostname in groups.masters or inventory_hostname in groups.nfs'
       tags: nfs_setup
 
     - name: Create a Logical Volume in the vg
@@ -92,14 +94,14 @@
         vg: nfsvg
         lv: nfslv
         size: +100%FREE
-      when: 'inventory_hostname in groups.masters or inventory_hostname in groups.infras'
+      when: 'inventory_hostname in groups.masters or inventory_hostname in groups.nfs'
       tags: nfs_setup
 
     - name: Create a fiiesystem on the Logical Volume
       filesystem:
         fstype: xfs
         dev: /dev/mapper/nfsvg-nfslv
-      when: 'inventory_hostname in groups.masters or inventory_hostname in groups.infras'
+      when: 'inventory_hostname in groups.masters or inventory_hostname in groups.nfs'
       tags: nfs_setup
  
     - name: Create a directory to mount on on the master
@@ -115,12 +117,12 @@
         path: /etc/fstab
         line: /dev/mapper/nfsvg-nfslv  /exports xfs  defaults 0 0
         insertafter: ^UUID
-      when: 'inventory_hostname in groups.masters or inventory_hostname in groups.infras'
+      when: 'inventory_hostname in groups.masters or inventory_hostname in groups.nfs'
       tags: nfs_setup
 
     - name: Mount the filesystem on mountpoint
       command: mount -a remount
-      when: 'inventory_hostname in groups.masters or inventory_hostname in groups.infras'
+      when: 'inventory_hostname in groups.masters or inventory_hostname in groups.nfs'
       tags: nfs_setup
       
 #    - name: prep nfs storage
