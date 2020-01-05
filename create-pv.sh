@@ -4,8 +4,8 @@
 # ater this runs, you can create the PVs by changing to the YAML_FILES_DIR and using
 # a "for i in * ; do oc create -f $i ; done" loop
 
-export NFS_SERVER="helper.ocp3.example.com"
-export volsize="1Gi"
+export NFS_SERVER="helper2.ocp.example.com"
+export volsize="2Gi"
 export NUM_VOLUMES=10
 export YAML_FILES_DIR="/root/pvs"
 
