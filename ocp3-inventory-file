@@ -194,4 +194,4 @@ infra.ocp.example.com openshift_node_group_name='node-config-infra'
 
 # Helper node with NFS
 [nfs]
-helper2.ocp.example.com
+helper.ocp.example.com

@@ -84,9 +84,9 @@
     - name: Create a PV, VG, and LV
       lvg:
         vg: nfsvg
-        pvs: /dev/vdc
+        pvs: /dev/sdc
         state: present
-      when: 'inventory_hostname in groups.masters or inventory_hostname in groups.nfs'
+      when: 'inventory_hostname in groups.nfs'
       tags: nfs_setup
 
     - name: Create a Logical Volume in the vg
@@ -94,14 +94,14 @@
         vg: nfsvg
         lv: nfslv
         size: +100%FREE
-      when: 'inventory_hostname in groups.masters or inventory_hostname in groups.nfs'
+      when: 'inventory_hostname in groups.nfs'
       tags: nfs_setup
 
     - name: Create a fiiesystem on the Logical Volume
       filesystem:
         fstype: xfs
         dev: /dev/mapper/nfsvg-nfslv
-      when: 'inventory_hostname in groups.masters or inventory_hostname in groups.nfs'
+      when: 'inventory_hostname in groups.nfs'
       tags: nfs_setup
  
     - name: Create a directory to mount on on the master
@@ -111,18 +111,20 @@
         state: directory
         owner: root        
       tags: nfs_setup
+      when: 'inventory_hostname in groups.nfs'
+      
 
     - name: Create the mount point in fstab
       lineinfile:
         path: /etc/fstab
         line: /dev/mapper/nfsvg-nfslv  /exports xfs  defaults 0 0
         insertafter: ^UUID
-      when: 'inventory_hostname in groups.masters or inventory_hostname in groups.nfs'
+      when: 'inventory_hostname in groups.nfs'
       tags: nfs_setup
 
     - name: Mount the filesystem on mountpoint
       command: mount -a remount
-      when: 'inventory_hostname in groups.masters or inventory_hostname in groups.nfs'
+      when: 'inventory_hostname in groups.nfs'
       tags: nfs_setup
       
 #    - name: prep nfs storage
