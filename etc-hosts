@@ -2,14 +2,13 @@
 ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
 192.168.29.40 esxi.example.com esxi
 192.168.29.41 vcenter.example.com vcenter
-192.168.29.49 helper.ocp.example.com helper
-192.168.29.49 helper.ocp.jimbarlow.com helper
+192.168.29.49 helper.ocp4.example.com helper
 192.168.29.50 master.ocp.example.com master
 192.168.29.50 master.ocp.jimbarlow.com master
 192.168.29.51 node1.ocp.example.com node1
 192.168.29.52 node2.ocp.example.com node2
 192.168.29.53 infra.ocp.example.com infra
-192.168.29.53 apps.ocp.jimbarlow.com apps
+# 192.168.29.53 apps.ocp.jimbarlow.com apps
 
 192.168.29.49 lb.ocp4.example.com
 192.168.29.180 bootstrap-01.ocp4.example.com bootstrap-01
@@ -27,4 +26,6 @@
 192.168.29.49 api.ocp4.example.com api
 
 192.168.29.49 api-int.ocp4.example.com api-int
+
+192.168.29.49 apps.ocp4.example.com apps
 
