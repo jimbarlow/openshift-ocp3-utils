@@ -2,30 +2,34 @@
 ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
 192.168.29.40 esxi.example.com esxi
 192.168.29.41 vcenter.example.com vcenter
-192.168.29.49 helper.ocp4.example.com helper
-192.168.29.50 master.ocp.example.com master
+
+192.168.29.49 helper.ocp4.jimbarlow.com helper
+
+192.168.29.48 nfs.ocp.jimbarlow.com nfs
 192.168.29.50 master.ocp.jimbarlow.com master
-192.168.29.51 node1.ocp.example.com node1
-192.168.29.52 node2.ocp.example.com node2
-192.168.29.53 infra.ocp.example.com infra
-# 192.168.29.53 apps.ocp.jimbarlow.com apps
+192.168.29.51 node1.ocp.jimbarlow.com node1
+192.168.29.52 node2.ocp.jimbarlow.com node2
+192.168.29.53 infra.ocp.jimbarlow.com infra
+192.168.29.53 apps.ocp.jimbarlow.com apps
 
-192.168.29.49 lb.ocp4.example.com
-192.168.29.180 bootstrap-01.ocp4.example.com bootstrap-01
-192.168.29.181 master-01.ocp4.example.com master-01
-192.168.29.182 master-02.ocp4.example.com master-02
-192.168.29.183 master-03.ocp4.example.com master-03
+192.168.29.49 lb.ocp4.jimbarlow.com
+192.168.29.49 apps.ocp4.jimbarlow.com
 
-192.168.29.181 etcd-0.ocp4.example.com etcd-0
-192.168.29.182 etcd-1.ocp4.example.com etcd-1
-192.168.29.183 etcd-2.ocp4.example.com etcd-2
+192.168.29.180 bootstrap-01.ocp4.jimbarlow.com bootstrap-01
+192.168.29.181 master-01.ocp4.jimbarlow.com master-01
+192.168.29.182 master-02.ocp4.jimbarlow.com master-02
+192.168.29.183 master-03.ocp4.jimbarlow.com master-03
 
-192.168.29.191 worker-01.ocp4.example.com worker-01
-192.168.29.192 worker-02.ocp4.example.com worker-02
+192.168.29.181 etcd-0.ocp4.jimbarlow.com etcd-0
+192.168.29.182 etcd-1.ocp4.jimbarlow.com etcd-1
+192.168.29.183 etcd-2.ocp4.jimbarlow.com etcd-2
 
-192.168.29.49 api.ocp4.example.com api
+192.168.29.191 worker-01.ocp4.jimbarlow.com worker-01
+192.168.29.192 worker-02.ocp4.jimbarlow.com worker-02
 
-192.168.29.49 api-int.ocp4.example.com api-int
+192.168.29.49 api.ocp4.jimbarlow.com
 
-192.168.29.49 apps.ocp4.example.com apps
+192.168.29.49 api-int.ocp4.jimbarlow.com
+
+192.168.29.49 apps.ocp4.jimbarlow.com
 
